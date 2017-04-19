@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 const PATHS = {
 	app: path.join(__dirname, 'app'),
@@ -18,6 +19,19 @@ const commonConfig = {
 		new HtmlWebpackPlugin({
 			title: 'Webpack demo',
 		}),
+		new webpack.LoaderOptionsPlugin({
+			options: {
+				eslint: {
+					failOnWarning: false,
+					failOnError: true,
+					fix: false,
+					outputReport: {
+						filePath: 'checkstyle.xml',
+						formatter: require('eslint/lib/formatters/checkstyle'),
+					},
+				},
+			},
+		}),
 	],
 };
 
@@ -30,6 +44,10 @@ const developmentConfig = () => {
 			stats: 'errors-only',
 			host: process.env.HOST,
 			port: process.env.PORT,
+			overlay: {
+				errors: true,
+				warnings: true,
+			},
 		},
 		module: {
 			rules: [
