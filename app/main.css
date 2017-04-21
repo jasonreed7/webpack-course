@@ -1,7 +1,4 @@
 body {
 	background: cornsilk;
-}
-
-.redButton {
-	background: red;
+	display: flex;
 }
