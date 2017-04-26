@@ -104,7 +104,7 @@ exports.purifyCSS = ({ paths }) => ({
 	],
 });
 
-exports.loadImages = ({ include, exclude, options }) => ({
+exports.loadImages = ({ include, exclude, options } = {}) => ({
 	module: {
 		rules: [
 			{
@@ -115,6 +115,48 @@ exports.loadImages = ({ include, exclude, options }) => ({
 				use: {
 					loader: 'url-loader',
 					options,
+				},
+			},
+		],
+	},
+});
+
+exports.loadFonts = ({ include, exclude, options } = {}) => ({
+	module: {
+		rules: [
+			{
+				// Capture eot, ttf, woff, and woff2
+				test: /\.(eot|ttf|woff|woff2)(\?v=\d+\.\d+)?$/,
+				include,
+				exclude,
+
+				use: {
+					loader: 'file-loader',
+					options,
+				}, 
+			},
+		],
+	},
+});
+
+exports.loadJavascript = ({ include, exclude }) => ({
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				include,
+				exclude,
+
+				loader: 'babel-loader',
+				options: {
+					/*
+					Enable caching for improved performance during
+					development.
+					It uses default OS directory by default. If you need
+					something more custom, pass a path to it.
+					I.e., { cacheDirectory: '<path>' }
+					*/
+					cacheDirectory: true,
 				},
 			},
 		],
