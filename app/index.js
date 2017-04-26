@@ -1,3 +1,4 @@
+import 'react';
 import 'font-awesome/css/font-awesome.css';
 
 require('purecss');
