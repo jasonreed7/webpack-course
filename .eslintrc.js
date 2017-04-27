@@ -6,8 +6,11 @@ module.exports = {
     node: true,
   },
   extends: 'eslint:recommended',
+  parser: 'babel-eslint',
   parserOptions: {
     sourceType: 'module',
+
+    allowImportExportEverywhere: true,
   },
   rules: {
     'comma-dangle': ['error', 'always-multiline'],
