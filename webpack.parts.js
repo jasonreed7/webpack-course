@@ -2,6 +2,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const BabiliPlugin = require('babili-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
 const webpack = require('webpack');
 
 exports.devServer = ({ host, port } = {}) => ({
@@ -187,5 +190,21 @@ exports.attachRevision = () => ({
 		new webpack.BannerPlugin({
 			banner: new GitRevisionPlugin().version(),
 		}),	
+	],
+});
+
+exports.minifyJavaScript = () => ({
+	plugins: [
+		new BabiliPlugin(),
+	],
+});
+
+exports.minifyCSS = ({ options }) => ({
+	plugins: [
+		new OptimizeCSSAssetsPlugin({
+			cssProcessor: cssnano,
+			cssProcessorOptions: options,
+			canPrint: false,
+		}),
 	],
 });
