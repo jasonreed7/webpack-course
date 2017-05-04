@@ -31,7 +31,7 @@ const commonConfig = merge([
   parts.lintCSS({ include: PATHS.app }),
   parts.loadFonts({
     options: {
-      name: '[name].[ext]',
+      name: '[name].[hash:8].[ext]',
     },
   }),
   parts.loadJavascript({ include: PATHS.app }),
@@ -45,6 +45,11 @@ const commonConfig = merge([
         resource.match(/\.js$/)
       ),
     },
+
+    {
+      name: 'manifest',
+      minChunks: Infinity,
+    },
   ]),
 ]);
 
@@ -56,7 +61,20 @@ const productionConfig = merge([
       maxEntrypointSize: 100000, // in bytes
       maxAssetSize: 450000, // in bytes
     },
+
+    output: {
+      chunkFilename: '[name].[chunkhash:8].js',
+      filename: '[name].[chunkhash:8].js',
+    },
+
+    plugins: [
+      new webpack.HashedModuleIdsPlugin(),
+    ],
+
+    recordsPath: path.join(__dirname, 'records.json'),
   },
+
+  
 
   parts.clean(PATHS.build),
 
@@ -84,9 +102,14 @@ const productionConfig = merge([
   parts.loadImages({
     options: {
       limit: 15000,
-      name: '[name].[ext]',
+      name: '[name].[hash:8].[ext]',
     },
   }),
+
+  parts.setFreeVariable(
+    'process.env.NODE_ENV',
+    'production'
+  ),
 ]);
 
 const developmentConfig = merge([
