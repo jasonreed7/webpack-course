@@ -58,6 +58,7 @@ typings/
 .env
 
 build/
+dist/
 
 records.json
 stats.json

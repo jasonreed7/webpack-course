@@ -1,3 +1,4 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -18,6 +19,24 @@ exports.devServer = ({ host, port } = {}) => ({
       warnings: true,
     },
   },
+});
+
+exports.page = ({
+	path = '',
+	template = require.resolve(
+		'html-webpack-plugin/default_index.ejs'
+	),
+	title,
+	entry,
+} = {}) => ({
+	entry,
+	plugins: [
+		new HtmlWebpackPlugin({
+			filename: `${path && path + '/'}index.html`,
+			template,
+			title,
+		}),
+	],
 });
 
 exports.lintJavaScript = ({ include, exclude, options }) => ({
