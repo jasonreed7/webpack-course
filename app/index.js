@@ -11,3 +11,5 @@ import { bake } from './shake';
 bake();
 
 document.body.appendChild(component());
+
+console.log('hi');

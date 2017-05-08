@@ -25,22 +25,6 @@ const commonConfig = merge([
     },
   }),
   parts.loadJavascript({ include: PATHS.app }),
-  parts.extractBundles([
-    {
-      name: 'vendor',
-
-      minChunks: ({ resource }) => (
-        resource &&
-        resource.indexOf('node_modules') >= 0 &&
-        resource.match(/\.js$/)
-      ),
-    },
-
-    {
-      name: 'manifest',
-      minChunks: Infinity,
-    },
-  ]),
 ]);
 
 const productionConfig = merge([
@@ -100,6 +84,23 @@ const productionConfig = merge([
     'process.env.NODE_ENV',
     'production'
   ),
+
+  parts.extractBundles([
+    {
+      name: 'vendor',
+
+      minChunks: ({ resource }) => (
+        resource &&
+        resource.indexOf('node_modules') >= 0 &&
+        resource.match(/\.js$/)
+      ),
+    },
+
+    {
+      name: 'manifest',
+      minChunks: Infinity,
+    },
+  ]),
 ]);
 
 const developmentConfig = merge([
@@ -125,6 +126,8 @@ module.exports = (env) => {
       entry: {
         app: PATHS.app,
       }, 
+
+      chunks: ['app', 'manifest', 'vendor'],
     }),
     parts.page({ 
       title: 'Another demo', 
@@ -132,11 +135,13 @@ module.exports = (env) => {
       entry: {
         another: path.join(PATHS.app, 'another.js'),
       }, 
+
+      chunks: ['another', 'manifest', 'vendor'],
     }),
   ];
   const config = env === 'production' ?
     productionConfig :
     developmentConfig;
 
-  return pages.map(page => merge(commonConfig, config, page));
+  return merge([commonConfig, config].concat(pages));
 };
